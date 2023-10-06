@@ -11,7 +11,7 @@ type NoteFormProps = {
   availableTags: Tag[];
 };
 
-function NoteForm({ onSubmit, onAddTag, availableTags }: NoteFormProps) {
+export function NoteForm({ onSubmit, onAddTag, availableTags }: NoteFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
@@ -84,5 +84,3 @@ function NoteForm({ onSubmit, onAddTag, availableTags }: NoteFormProps) {
     </Form>
   );
 }
-
-export default NoteForm;
