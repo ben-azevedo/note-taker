@@ -8,6 +8,7 @@ import { v4 as uuidV4 } from "uuid";
 import { NoteList } from "./NoteList";
 import { NoteLayout } from "./NoteLayout";
 import { Note } from "./Note";
+import { EditNote } from "./EditNote";
 
 // NoteData doesn't have a string, so NoteData was appened to Note
 export type Note = {
@@ -57,6 +58,18 @@ function App() {
     });
   }
 
+  function onUpdateNote(id: string, { tags, ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return prevNotes.map((note) => {
+        if (note.id === id) {
+          return { ...note, ...data, tagIds: tags.map((tag) => tag.id) };
+        } else {
+          return note;
+        }
+      });
+    });
+  }
+
   function addTag(tag: Tag) {
     setTags((prev) => [...prev, tag]);
   }
@@ -64,7 +77,10 @@ function App() {
   return (
     <Container className="my-4">
       <Routes>
-        <Route path="/" element={<NoteList notes={notesWithTags} availableTags={tags}/>} />
+        <Route
+          path="/"
+          element={<NoteList notes={notesWithTags} availableTags={tags} />}
+        />
         <Route
           path="/new"
           element={
@@ -76,8 +92,17 @@ function App() {
           }
         />
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-          <Route index element={<Note/>} />
-          <Route path="edit" element={<h1>Edit</h1>} />
+          <Route index element={<Note />} />
+          <Route
+            path="edit"
+            element={
+              <EditNote
+                onSubmit={onUpdateNote}
+                onAddTag={addTag}
+                availableTags={tags}
+              />
+            }
+          />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
